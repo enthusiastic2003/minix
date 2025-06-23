@@ -1603,7 +1603,7 @@ rebuildmake()
 		statusmsg "Bootstrapping ${toolprefix}make"
 		${runcmd} cd "${tmpdir}"
 		${runcmd} env CC="${HOST_CC-cc}" CPPFLAGS="${HOST_CPPFLAGS}" \
-			CFLAGS="${HOST_CFLAGS--O}" LDFLAGS="${HOST_LDFLAGS}" \
+			CFLAGS="${HOST_CFLAGS--O} -fcommon" LDFLAGS="${HOST_LDFLAGS}" \
 			${HOST_SH} "${TOP}/tools/make/configure" ||
 		    ( cp ${tmpdir}/config.log ${tmpdir}-config.log
 		      bomb "Configure of ${toolprefix}make failed, see ${tmpdir}-config.log for details" )
@@ -1924,6 +1924,7 @@ make_in_dir()
 
 buildtools()
 {
+	CFLAGS=-fcommon
 	if [ "${MKOBJDIRS}" != "no" ]; then
 		${runcmd} "${makewrapper}" ${parallel} obj-tools ||
 		    bomb "Failed to make obj-tools"
